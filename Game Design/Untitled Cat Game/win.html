@@ -1,19 +1,24 @@
 <html>
 	<head>
-		<title> Cat Puzzle </title>
+		<title> You Win! </title>
 		<script src="https://simplycodingcourses.com/files/simply.js">
 	</script>
 		<script>
 		function start(){
 		sjs.open("target",500,400);
 
-var instructions = new sjs.Text("Use arrow keys to move, down to crouch.", 25, "white");
-instructions.centerH();
+var win = new sjs.Text("You Win!!", 50, "green");
+win.center().offset(0,-50);
 
-var btn = new sjs.Button("Start", function(){
-	window.location = "Untitled_Cat_Game.html"
+var thx = new sjs.Text("Thanks for playing! :)", 50, "white")
+thx.center();
+
+var menu = new sjs.Button("Return to Menu", function(){
+	window.location = "menu.html"
 });
-btn.center();
+menu.center().offset(0,50);
+
+
 
 
 
@@ -26,7 +31,7 @@ btn.center();
 	</script>
 </head>
 <body onload="start()">
-	<h1> Cat Puzzle </h1>
+	<h1> You Win! </h1>
 
 	   <div id="target" style="margin:auto;background:black;"></div>
 	</body>
