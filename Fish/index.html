@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Menu </title>
+		<script src="https://simplycodingcourses.com/files/simplyjs/simply.js">
+</script>
+	<script>
+		function start(){
+		  sjs.open();
+
+var menu = new sjs.Text("MENU", 50, "green");
+menu.centerH();
+
+var htp = new sjs.Text("Use the arrow keys to mvoe. Eat the smaller fish to grow bigger.", 28, "blue");
+htp.centerH().offset(0, 50);
+
+
+var btn = new sjs.Button("Start", function(){
+	window.location = "fish.html";
+});
+
+ btn.center();
+
+var me = new sjs.Text("Created by me.", 20, "black");
+me.bottom().centerH();
+		}
+	  </script>
+	</head>
+	<body onload="start()">
+		<h1> Fish </h1>
+
+		<div id="target" style="margin:auto;background:grey;"></div>
+	</body>
+</html>
