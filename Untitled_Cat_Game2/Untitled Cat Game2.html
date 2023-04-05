@@ -1,0 +1,173 @@
+<html>
+	<head>
+		<title> Untitled Cat Game II</title>
+		<script src="https://simplycodingcourses.com/files/simply.js">
+</script>
+	<script>
+		function start(){
+		sjs.open("target",1525,610);
+
+//GAME SHELL
+var background1 = new sjs.Image("Images/Bedroom.JPG");
+background1.setSize(1525,610);
+
+//player properties
+var cat = new sjs.Image("Images/CatR.png");
+cat.setSize(150,100);
+cat.type = "cat"
+cat.setGravity(5);
+cat.friction = .2;
+cat.bottom();
+cat.noBounds = true;
+
+
+//player movement
+
+rFacing = true
+sjs.keyDown(RIGHT_KEY, function(){
+	cat.pushRight(1);
+	cat.setImage("Images/WalkingCatR.gif");
+	rFacing = true
+});
+
+sjs.keyDown(LEFT_KEY, function(){
+	cat.pushLeft(1);
+	cat.setImage("Images/WalkingCatL.gif");
+	rFacing = false
+});
+
+sjs.keyDown(DOWN_KEY, function(){
+	if(rFacing == true){
+			cat.setImage("Images/SittingCatR.png");
+			cat.setSize(150,50);
+		} else {
+			cat.setImage("Images/SittingCatL.png");
+			cat.setSize(150,50);
+		}
+});
+
+window.addEventListener("keyup", function(e){
+	if(e.keyCode == RIGHT_KEY){
+		cat.setImage("Images/CatR.png");
+	} else if (e.keyCode == LEFT_KEY){
+		cat.setImage("Images/CatL.png");
+	} else if (e.keyCode == DOWN_KEY){
+		if(rFacing == true){
+			cat.setImage("Images/CatR.png");
+			cat.setSize(150,100);
+			if(cat.y >= 550){
+			cat.pushUp(20);
+			}//end else if
+		} else {
+			cat.setImage("Images/CatL.png");
+			cat.setSize(150,100);
+			if(cat.y >= 550){
+				cat.pushUp(20);
+			}//end if cat.y
+		}//end else
+	}//end if keyCode
+});//end event listener
+
+var canJump = true
+sjs.keyDown(UP_KEY, function(){
+	if(canJump == true){
+		canJump = false;
+		cat.pushUp(50);
+	}
+});
+
+//on hits
+sjs.onHit("cat", "bottom_screen",function(x,y){
+	sjs.stoppedBy(x,y);
+	if(canJump == false){
+		canJump = true;
+	}
+});
+
+sjs.onHit("cat", ["right_screen","left_screen","top_screen"],function(x,y){
+	sjs.stoppedBy(x,y);
+});
+
+sjs.onHit("cat", ["platform", "platformV"],function(x,y){
+	sjs.stoppedBy(x,y);
+	if(canJump == false && x.y < y.y-85){
+		canJump = true;
+	}
+});
+
+sjs.onHit("cat", "gCollar",function(x,y){
+	y.destroy();
+	gCollarI.setImage("Images/Green_Collar.gif");
+	gCollarCollected = true;
+});
+
+sjs.onHit("cat", "green",function(x,y){
+	if(gCollarCollected == true){
+		y.destroy();
+	} else {
+		sjs.stoppedBy(x,y);
+	}
+});
+
+sjs.onHit("cat", "key",function(x,y){
+	y.destroy();
+	keyI.setImage("Images/Key.gif");
+	keyCollected = true;
+});
+
+sjs.onHit("cat", "door",function(x,y){
+	x.stop();
+	x.pushRight(1);
+	x.setImage("Images/WalkingCatR.gif");
+	if(keyCollected == true){
+		y.setImage("Images/DoorOpening.gif");
+		setTimeout(function(){
+			window.location = "win.html"
+		},1200);
+	}
+});
+
+//inventory
+
+var gCollarCollected = false;
+var keyCollected = false;
+
+var inventory = new sjs.Text("Inventory:", 40, "black")
+inventory.moveTo(5,0);
+
+var gCollarI = new sjs.Image("Images/Blank_Inventory.png");
+gCollarI.setSize(50,50);
+gCollarI.moveTo(185,0);
+
+
+var keyI = new sjs.Image("Images/Blank_Inventory.png");
+keyI.setSize(50,50);
+keyI.moveTo(250,0);
+//END GAME SHELL
+
+//NEW CONCETPS
+sjs.onHit("cat", "jump_pad", function(x,y){
+	if(x.isAboveOf(y) == true){
+		player.pushUp(50);
+	} else {
+		sjs.stoppedBy(x,y);
+	}
+});
+
+function jumpPad(){
+	jump_pad = new sjs.Image("Images/jump_pad.png");
+	jump_pad.type = "jump_pad";
+}
+
+//Level Design
+
+
+		} //end start
+	</script>
+</head>
+<body onload="start()">
+	<h1> Untitled Cat Game II </h1>
+
+	  <div id="target" style="margin:auto;background:grey;"></div>
+	</body>
+</html>

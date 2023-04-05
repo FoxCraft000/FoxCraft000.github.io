@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Cat Puzzle </title>
+		<script src="https://simplycodingcourses.com/files/simply.js">
+	</script>
+		<script>
+		function start(){
+		sjs.open("target",500,400);
+
+var instructions = new sjs.Text("Use arrow keys to move, down to crouch.", 25, "white");
+instructions.centerH();
+
+var btn = new sjs.Button("Start", function(){
+	window.location = "Untitled_Cat_Game.html"
+});
+btn.center();
+
+
+
+
+
+
+
+
+		} //end start
+	</script>
+</head>
+<body onload="start()">
+	<h1> Cat Puzzle </h1>
+
+	   <div id="target" style="margin:auto;background:black;"></div>
+	</body>
+</html>
