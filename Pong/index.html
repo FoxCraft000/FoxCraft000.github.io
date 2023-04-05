@@ -1,0 +1,33 @@
+<html>
+<head>
+<title> Menu </title>
+<script src="https://simplycodingcourses.com/files/simplyjs/simply.js"></script>
+<script>
+function start(){
+sjs.open();
+
+//menu text
+var menu = new sjs.Text("MENU", 28, "blue");
+menu.centerH();
+var htp = new sjs.Text("Use the Arrow Keys & W/S to Play!", 28, "blue");
+htp.centerH().offset(0, 25);
+
+//link to the pong site
+var btn = new sjs.Button("Play", function(){
+	window.location = "pong.html";
+});
+btn.center();
+
+//creator txt
+var me = new sjs.Text("created by codEr", 28, "blue");
+me.centerH().bottom();
+
+} //end start
+</script>
+</head>
+<body onload="start()">
+<h1> Menu </h1>
+
+<div id="target" style="margin:auto;background:grey;"></div>
+</body>
+</html>

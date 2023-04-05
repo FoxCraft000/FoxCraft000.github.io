@@ -1,0 +1,118 @@
+<html>
+<head>
+<title> Pong </title>
+<script src="https://simplycodingcourses.com/files/simplyjs/simply.js">
+</script>
+<script>
+
+function start(){
+	sjs.open("target",500,400);
+
+//ball speed vars (for when the score incerces)
+var ballX = 4;
+var ballY = 4;
+
+	//Ball Object and Properties
+	var ball = new sjs.Image("Images/spike.png");
+	ball.type = "ball";
+	ball.setSize(50,50);
+	ball.center();
+	ball.friction = 0;
+	ball.bounce();
+	ball.pushRight(ballX);
+	ball.pushUp(ballY);
+
+	//Paddle 1
+	var paddle1 = new sjs.Image("Images/blue.png");
+	paddle1.type = "paddle";
+	paddle1.centerH();
+	paddle1.setSize(100,20);
+
+	//Paddle 2
+	var paddle2 = new sjs.Image("Images/green.png");
+	paddle2.type = "paddle";
+	paddle2.centerH().bottom();
+	paddle2.setSize(100,20);
+
+	//barrier 1
+	var barrier = new sjs.Image("Images/red.png");
+	barrier.type = "paddle";
+	barrier.setSize(20,100);
+	barrier.moveTo(0, 150);
+
+	//barrier 2
+	var barrier2 = new sjs.Image("Images/red.png");
+	barrier2.type = "paddle";
+	barrier2.setSize(20,100);
+	barrier2.moveTo(500, 150);
+	
+
+	//Makes the Paddles move (coppy later to make paddles seperate)
+	sjs.keyDown(LEFT_KEY, function(){
+		paddle1.pushLeft();
+		paddle2.pushLeft();
+
+	});
+
+	sjs.keyDown(RIGHT_KEY, function(){
+		paddle1.pushRight();
+		paddle2.pushRight();
+	});
+
+	sjs.keyDown(W_KEY, function(){
+		barrier.pushUp();
+		barrier2.pushUp();
+	});
+
+	sjs.keyDown(S_KEY, function(){
+		barrier.pushDown();
+		barrier2.pushDown();
+	});
+
+	//score code
+	var score = 0;
+	var score_txt = new sjs.Text("Score: 0", 21, "orange");
+
+	//sound code
+	var soundEffect = new Audio('Music/techno.mp3');
+
+	//makes ball bounce off paddles
+	sjs.onHit("ball","paddle", function(ball,paddle){
+		score = score + 1;
+		score_txt.setText("Score: "+score);
+		soundEffect.play();
+		sjs.bounceOff(ball,paddle);
+	});
+
+	//makes ball bounce off paddle
+	sjs.onHit("ball","paddle", function(ball,paddle){
+		score = score + 1;
+		score_txt.setText("Score: "+score);
+		soundEffect.play();
+		sjs.bounceOff(ball,paddle);
+	});
+
+	if(score % 6 == 0){
+		ballX + 1;
+		ballY + 1;
+	};
+
+	sjs.onHit("ball",["top_screen", "bottom_screen"], function(){
+		window.location = "player2win.html"
+	});
+
+	sjs.onHit("ball",["left_screen", "right_screen"], function(){
+		window.location = "player1win.html"
+	});
+
+	
+} //end start
+
+
+</script>
+</head>
+<body onload="start()">
+<h1> Pong Game </h1>
+<div id="target" style="margin:auto;background:grey;"></div>
+</body>
+</html>
