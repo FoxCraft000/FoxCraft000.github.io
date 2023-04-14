@@ -32,6 +32,7 @@ var playerDead = new Audio("SFX/oof.mp3");
 var slimeDead = new Audio("SFX/slimeDead.mp3");
 var ratDead = new Audio("SFX/ratDead.mp3");
 var skeletonDead = new Audio("SFX/skeletonDead.mp3");
+var alienDead = new Audio("SFX/alienDead.mp3");
 var credits = new Audio("SFX/credits.mp3");
 var bgm = new Audio("SFX/BGM.mp3");
 bgm.loop = true;
@@ -241,7 +242,73 @@ function ratAttack(){
 	}
 }//end spawnRat();
 function deadRat(x,y){
-	rat.destroy();
+	var deadRat = new sjs.Image("Images/dyingRat.gif");
+	deadRat.moveTo(x,y);
+	deadRat.setSize(17,3);
+	setTimeout(function(){
+		deadRat.destroy();
+	},500);
+}
+
+var megaAttack = false;
+function spawnAlien(){
+	var alien = new sjs.Image("Images/alien.gif");
+		alien.setSize(107.5,132.5);
+		alien.moveTo(100,390);
+		alien.type = "alien"
+function chooseAttack(){
+	var attack = Math.random();
+	if(attack >= 0.75){
+		alienAttackMega();
+	} else {
+		alienAttack();
+	}
+}
+setInterval(chooseAttack,1500);
+function alienAttack(){
+	megaAttack = false;
+	alien.setSize(107.5,132.5);
+		if(alien.x < player.x){
+			alien.pushRight(4);
+			alien.setImage("Images/alien.gif");
+		}
+		if(alien.x > player.x){
+			alien.pushLeft(4);
+			alien.setImage("Images/alienL.gif")
+		}
+		if(alien.y < player.y){
+			alien.pushDown(4);
+		}
+		if(alien.y > player.y){
+			alien.pushUp(4);
+		}
+	}
+function alienAttackMega(){
+	megaAttack = true;
+	alien.setSize(180,150);
+	if(alien.x < player.x){
+			alien.pushRight(7);
+			alien.setImage("Images/alienAttack.gif");
+		}
+		if(alien.x > player.x){
+			alien.pushLeft(7);
+			alien.setImage("Images/alienAttackL.gif")
+		}
+		if(alien.y < player.y){
+			alien.pushDown(7);
+		}
+		if(alien.y > player.y){
+			alien.pushUp(7);
+		}
+	}
+}//end spawnAlien();
+function deadAlien(x,y){
+	var deadAlien = new sjs.Image("Images/dyingAlien.gif");
+	deadAlien.moveTo(x,y);
+	deadAlien.setSize(90,60);
+	setTimeout(function(){
+		deadAlien.destroy();
+	},400);
 }
 
 //sword attack, only from the front, so u cant kill enemies if they are behind u.
@@ -298,9 +365,6 @@ sjs.onHit("player", "skeleton", function(x,y){
 	}
 });
 
-sjs.keyDown(ONE_KEY, function(){
-	practiceEnemy();
-});
 
 sjs.onHit("player", "rat", function(x,y){
 	if(sword == true){
@@ -327,9 +391,61 @@ sjs.onHit("player", "rat", function(x,y){
 		playerDead.play();
 	}
 });
-//GENERATE DUNGEON
 
+sjs.onHit("player", "alien", function(x,y){
+if(megaAttack == false){
+	if(sword == true){
+		if(rFacing == true && y.x > x.x){
+		alienDead.play();
+		deadAlien(y.x,y.y);
+		y.destroy();
+	} else if(rFacing == true && y.x < x.x){
+		y.destroy();
+		playerHealth -= 1;
+		playerDead.play();
+	} else if(rFacing == false && y.x < x.x){;
+		alienDead.play();
+		deadAlien(y.x,y.y);
+		y.destroy();
+	} else if(rFacing == false && y.x > x.x){
+		playerHealth -= 1;
+		y.destroy();
+		playerDead.play();
+	}
+	} else {
+		y.destroy();
+		playerHealth -= 1;
+		playerDead.play();
+	}
+} else {
+	if(sword == true){
+		if(rFacing == true && y.x > x.x){
+		y.pushRight(6);
+	} else if(rFacing == true && y.x < x.x){
+		y.destroy();
+		playerHealth -= 2;
+		playerDead.play();
+	} else if(rFacing == false && y.x < x.x){;
+		y.pushLeft(6);
+	} else if(rFacing == false && y.x > x.x){
+		playerHealth -= 2;
+		y.destroy();
+		playerDead.play();
+	}
+	} else {
+		y.destroy();
+		playerHealth -= 2;
+		playerDead.play();
+	}
+}
+});
 
+sjs.keyDown(ONE_KEY, function(){
+	practiceEnemy();
+});
+sjs.keyDown(TWO_KEY, function(){
+	spawnAlien();
+});
 
 }
 
@@ -337,10 +453,9 @@ sjs.onHit("player", "rat", function(x,y){
 /*atributions: 
 -"https://simplycoding.org/" for use of their JS library
 -Vic Fieger on "https://all-free-download.com/font/arcade.html" for font
--Addison Craik, on "https://craiky.github.io/tutorial/"" for dungeon generation code
+-Addison Craik, on "https://craiky.github.io/tutorial/"" for dungeon generation code(not on this tho)
 -sfx & bgm from "https://pixabay.com/sound-effects/search/splat/"
 -kingjeffery on "https://stackoverflow.com/questions/3273552/html5-audio-looping" for bgm code
--Dude on "https://www.khanacademy.org/computer-programming/health-bar/4846226356436992"
 */
 </script>
 </head>
